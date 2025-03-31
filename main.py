@@ -1,6 +1,6 @@
 import streamlit as st 
 from openai import OpenAI
-import gc  # Import garbage collector
+import psutil, gc
 
 class BuuhBot:
     def __init__(self) -> None:
@@ -41,12 +41,10 @@ class BuuhBot:
     def initBotMessage(self,user_input):
         if user_input:
             self.bot_message_widget = st.chat_message("assistant")
-            response = self.getResponse(user_input)
-            self.bot_message_widget.markdown(response)
+            response = self.bot_message_widget.write_stream(self.getResonse(user_input))
             self.createCache("assistant", response)
-            gc.collect()  # Explicitly call garbage collection
             
-    def getResponse(self,user_input):
+    def getResonse(self,user_input):
 
         client = OpenAI(
             base_url="https://openrouter.ai/api/v1",
@@ -73,7 +71,13 @@ class BuuhBot:
             ], 
             stream = True
         )
-        return response.choices[0].message.content  # Return the actual content
-
+        return response
+    def display_memory_usage(self):
+        # Get the memory usage of the current process
+        process = psutil.Process()
+        memory_info = process.memory_info()
+        memory_usage_mb = memory_info.rss / (1024 ** 2)  # Convert bytes to MB
+        st.sidebar.write(f"Memory usage: {memory_usage_mb:.2f} MB")  # Display in sidebar
 if __name__ == "__main__":
-    BuuhBot()
+    bot = BuuhBot()
+    bot.display_memory_usage()

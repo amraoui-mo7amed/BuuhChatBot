@@ -1,5 +1,4 @@
 [server]
-port = 4441
 runOnSave = true
 [theme]
 base='dark'
