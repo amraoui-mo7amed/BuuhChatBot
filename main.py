@@ -1,6 +1,5 @@
 import streamlit as st 
 from openai import OpenAI
-import psutil, gc
 
 class BuuhBot:
     def __init__(self) -> None:
@@ -72,12 +71,6 @@ class BuuhBot:
             stream = True
         )
         return response
-    def display_memory_usage(self):
-        # Get the memory usage of the current process
-        process = psutil.Process()
-        memory_info = process.memory_info()
-        memory_usage_mb = memory_info.rss / (1024 ** 2)  # Convert bytes to MB
-        st.sidebar.write(f"Memory usage: {memory_usage_mb:.2f} MB")  # Display in sidebar
+    
 if __name__ == "__main__":
-    bot = BuuhBot()
-    bot.display_memory_usage()
+    BuuhBot()
