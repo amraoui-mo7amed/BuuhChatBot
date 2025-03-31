@@ -19,7 +19,7 @@ Buuh ChatBot is a conversational AI application built using Streamlit and [DeepS
 
 1. Clone the repository:
    ```bash
-   git clone https://github.com/yourusername/BuuhChatBot.git
+   git clone https://github.com/amraoui-mo7amed/BuuhChatBot.git
    cd BuuhChatBot
    ```
 
