@@ -1,5 +1,6 @@
 import streamlit as st 
 from openai import OpenAI
+import gc  # Import garbage collector
 
 class BuuhBot:
     def __init__(self) -> None:
@@ -40,10 +41,12 @@ class BuuhBot:
     def initBotMessage(self,user_input):
         if user_input:
             self.bot_message_widget = st.chat_message("assistant")
-            response = self.bot_message_widget.write_stream(self.getResonse(user_input))
+            response = self.getResponse(user_input)
+            self.bot_message_widget.markdown(response)
             self.createCache("assistant", response)
+            gc.collect()  # Explicitly call garbage collection
             
-    def getResonse(self,user_input):
+    def getResponse(self,user_input):
 
         client = OpenAI(
             base_url="https://openrouter.ai/api/v1",
@@ -70,7 +73,7 @@ class BuuhBot:
             ], 
             stream = True
         )
-        return response
+        return response.choices[0].message.content  # Return the actual content
 
 if __name__ == "__main__":
     BuuhBot()
