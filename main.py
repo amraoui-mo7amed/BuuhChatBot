@@ -37,13 +37,22 @@ class BuuhBot:
             self.createCache("user",self.user_input)
             self.initBotMessage(self.user_input)
 
-    def initBotMessage(self,user_input):
+    def initBotMessage(self, user_input):
         if user_input:
             self.bot_message_widget = st.chat_message("assistant")
-            response = self.bot_message_widget.write_stream(self.getResonse(user_input))
-            self.createCache("assistant", response)
-            
-    def getResonse(self,user_input):
+            with self.bot_message_widget:
+                # Create an empty placeholder for the loading message
+                reply = st.empty()  
+                
+                # Use the spinner while getting the response
+                with st.spinner("Getting response...",show_time=True):
+                    response = self.getResponse(user_input)  # Get the response from the API
+                
+                    # Display the actual response
+                reply.write_stream(response)  # Update the placeholder with the actual response
+                self.createCache("assistant", response)  # Cache the response
+
+    def getResponse(self,user_input):
 
         client = OpenAI(
             base_url="https://openrouter.ai/api/v1",
