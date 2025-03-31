@@ -49,8 +49,8 @@ class BuuhBot:
                     response = self.getResponse(user_input)  # Get the response from the API
                 
                     # Display the actual response
-                reply.write_stream(response)  # Update the placeholder with the actual response
-                self.createCache("assistant", response)  # Cache the response
+                bot_reply = reply.write_stream(response)  # Update the placeholder with the actual response
+                self.createCache("assistant", bot_reply)  # Cache the response
 
     def getResponse(self,user_input):
 
